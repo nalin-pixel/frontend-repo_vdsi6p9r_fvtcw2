@@ -1,6 +1,7 @@
 import Spline from '@splinetool/react-spline';
 import { motion } from 'framer-motion';
 import { Star, Sparkles, Rocket, Quote } from 'lucide-react';
+import SectionOrbs from './SectionOrbs.jsx';
 
 const brands = [
   'OpenAI', 'NVIDIA', 'Adobe', 'Notion', 'Figma', 'HuggingFace', 'AWS', 'Google Cloud'
@@ -11,17 +12,19 @@ function LogoLoop() {
     <div className="relative py-8 overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.02] to-transparent pointer-events-none" />
       <div className="[mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]">
-        <div className="flex gap-14 animate-[scroll_30s_linear_infinite] will-change-transform">
+        <motion.div
+          initial={{ x: 0 }}
+          animate={{ x: ['0%', '-50%'] }}
+          transition={{ duration: 30, ease: 'linear', repeat: Infinity }}
+          className="flex gap-14 will-change-transform"
+        >
           {[...brands, ...brands].map((b, i) => (
             <div key={i} className="shrink-0 text-white/60 hover:text-white transition-colors text-sm tracking-wide">
               {b}
             </div>
           ))}
-        </div>
+        </motion.div>
       </div>
-      <style>{`
-        @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-      `}</style>
     </div>
   );
 }
@@ -38,7 +41,8 @@ function SectionTitle({ eyebrow, title, subtitle }) {
 
 function ServiceCard({ icon: Icon, title, desc }) {
   return (
-    <motion.div whileHover={{ y: -4 }} className="rounded-2xl bg-white/5 border border-white/10 p-6">
+    <motion.div whileHover={{ y: -6, rotateX: 2 }} className="relative rounded-2xl bg-white/5 border border-white/10 p-6">
+      <div className="pointer-events-none absolute -inset-px rounded-2xl bg-gradient-to-br from-purple-500/0 via-blue-500/0 to-orange-400/0 opacity-0 group-hover:opacity-20 transition-opacity" />
       <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/40 to-blue-500/40 flex items-center justify-center">
         <Icon size={18} />
       </div>
@@ -50,7 +54,7 @@ function ServiceCard({ icon: Icon, title, desc }) {
 
 function ProjectCard({ title, tags, image }) {
   return (
-    <motion.div whileHover={{ y: -4 }} className="rounded-2xl overflow-hidden bg-white/5 border border-white/10">
+    <motion.div whileHover={{ y: -6, rotateX: 2 }} className="group relative rounded-2xl overflow-hidden bg-white/5 border border-white/10">
       <div className="aspect-video bg-gradient-to-br from-purple-500/20 via-blue-500/20 to-orange-400/20" style={{backgroundImage: image ? `url(${image})` : undefined, backgroundSize: 'cover', backgroundPosition: 'center'}} />
       <div className="p-6">
         <h3 className="font-medium">{title}</h3>
@@ -66,25 +70,31 @@ function ProjectCard({ title, tags, image }) {
 
 function Testimonial({ quote, author, role }) {
   return (
-    <div className="rounded-2xl bg-white/5 border border-white/10 p-6">
+    <motion.div whileHover={{ y: -4 }} className="rounded-2xl bg-white/5 border border-white/10 p-6">
       <Quote className="text-white/30" size={20} />
       <p className="mt-4 text-white/80 leading-relaxed">“{quote}”</p>
       <p className="mt-4 text-sm text-white/60">{author} — {role}</p>
-    </div>
+    </motion.div>
   );
 }
 
 export default function Home() {
   return (
     <main>
-      {/* Hero */}
-      <section className="relative min-h-[80vh] flex items-center">
+      {/* Hero with new Spline */}
+      <section className="relative min-h-[90vh] flex items-center">
         <div className="absolute inset-0">
-          <Spline scene="https://prod.spline.design/4cHQr84zOGAHOehh/scene.splinecode" style={{ width: '100%', height: '100%' }} />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black pointer-events-none" />
+          <Spline scene="https://prod.spline.design/N8g2VNcx8Rycz93J/scene.splinecode" style={{ width: '100%', height: '100%' }} />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/70 to-black pointer-events-none" />
         </div>
         <div className="relative mx-auto max-w-7xl px-4 py-24 flex flex-col lg:flex-row items-center gap-12">
-          <div className="max-w-2xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: 'easeOut' }}
+            viewport={{ once: true }}
+            className="max-w-2xl"
+          >
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-white/80 text-xs">
               <Sparkles size={14} /> Trusted AI Solutions for Modern Brands
             </div>
@@ -109,8 +119,14 @@ export default function Home() {
                 <span>Automation-first</span>
               </div>
             </div>
-          </div>
-          <div className="w-full grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-lg">
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
+            viewport={{ once: true }}
+            className="w-full grid grid-cols-2 sm:grid-cols-3 gap-3 max-w-lg"
+          >
             {[
               { title: 'AI Video', desc: 'Commercial AI films, virtual production, avatars.' },
               { title: 'Automation', desc: 'Workflows, agents, orchestration that scale.' },
@@ -124,17 +140,19 @@ export default function Home() {
                 <p className="text-xs text-white/70 mt-1">{s.desc}</p>
               </div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Logos */}
-      <section className="mx-auto max-w-7xl px-4">
+      {/* Logos with soft parallax orbs */}
+      <section className="relative mx-auto max-w-7xl px-4">
+        <SectionOrbs intensity={0.6} />
         <LogoLoop />
       </section>
 
-      {/* Services */}
-      <section id="services" className="mx-auto max-w-7xl px-4 py-16">
+      {/* Services with interactive scroll orbs */}
+      <section id="services" className="relative mx-auto max-w-7xl px-4 py-16">
+        <SectionOrbs intensity={1} />
         <SectionTitle
           eyebrow="Services"
           title="End-to-end AI that ships outcomes"
@@ -147,8 +165,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Projects */}
-      <section id="projects" className="mx-auto max-w-7xl px-4 py-16">
+      {/* Projects with interactive scroll orbs */}
+      <section id="projects" className="relative mx-auto max-w-7xl px-4 py-16">
+        <SectionOrbs intensity={1.2} />
         <SectionTitle
           eyebrow="Projects"
           title="Selected work and prototypes"
@@ -161,8 +180,9 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="mx-auto max-w-7xl px-4 py-16">
+      {/* Testimonials with interactive scroll orbs */}
+      <section className="relative mx-auto max-w-7xl px-4 py-16">
+        <SectionOrbs intensity={0.8} />
         <SectionTitle
           eyebrow="Testimonials"
           title="What partners say"
@@ -175,7 +195,8 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section id="contact" className="mx-auto max-w-7xl px-4 py-20">
+      <section id="contact" className="relative mx-auto max-w-7xl px-4 py-20">
+        <SectionOrbs intensity={1} />
         <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-gradient-to-br from-purple-600/20 via-blue-600/10 to-orange-500/10">
           <div className="absolute -inset-1 opacity-30 blur-3xl bg-[radial-gradient(circle_at_20%_20%,rgba(168,85,247,0.25),transparent_40%),radial-gradient(circle_at_80%_30%,rgba(59,130,246,0.25),transparent_40%),radial-gradient(circle_at_50%_80%,rgba(249,115,22,0.2),transparent_40%)] pointer-events-none" />
           <div className="relative p-8 md:p-14">
